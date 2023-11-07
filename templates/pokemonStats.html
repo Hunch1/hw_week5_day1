@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+    <link rel="stylesheet" href="">
+{% endblock %}
+
+{% block content %}
+    <form method="POST">
+        <div class="mb-3">
+          <label for="pokemonNum" class="form-label">Enter Pokemon Number</label>
+          <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id">
+        </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    <!-- {{ pokemon_stats }} -->
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Base Experience</th>
+            <th scope="col">Shiny Sprite</th>
+            <th scope="col">Base attack</th>
+            <th scope="col">Base hp</th>
+            <th scope="col">Base defense</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in pokemon_stats %}
+            <tr>
+              <th scope="row">{{ data['name'] }}</th>
+              <td>{{ data['base experience'] }}</td>
+              <td>{{ data['shiny sprite'] }}</td>
+              <td>{{ data['attack base stat'] }}</td>
+              <td>{{ data['hp base stat'] }}</td>
+              <td>{{ data['defense base stat'] }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    
+{% endblock %}
