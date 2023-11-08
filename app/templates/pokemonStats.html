@@ -6,12 +6,15 @@
 
 {% block content %}
     <form method="POST">
+      {{ form.hidden_tag() }}
         <div class="mb-3">
           <label for="pokemonNum" class="form-label">Enter Pokemon Number</label>
-          <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id">
+          <!-- <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id"> -->
+          {{ form.pokemon(class="form-control", id="pokemonNum") }}
         </div>
         </div>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <!-- <button type="submit" class="btn btn-primary">Search</button> -->
+        {{ form.submit_btn(class="btn btn-primary") }}
     </form>
     <!-- {{ pokemon_stats }} -->
     <table class="table">
