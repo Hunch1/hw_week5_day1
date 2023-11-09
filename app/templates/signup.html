@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Sign Up</h1>
+<form method="POST" class="w-25 mx-auto shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        <label for="fname" class="form-label">First Name</label>
+        {{ form.first_name(class="form-control cus-input", id="fname") }}
+    </div>
+    <div class="mb-3">
+        <label for="lname" class="form-label">Last Name</label>
+        {{ form.last_name(class="form-control cus-input", id="lname") }}
+    </div>
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        {{ form.email(class="form-control cus-input", id="email") }}
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        {{ form.password(class="form-control cus-input", id="password") }}
+    </div>
+    <div class="mb-3">
+        <label for="cpassword" class="form-label">Confirm Password</label>
+        {{ form.confirm_password(class="form-control cus-input", id="cpassword") }}
+    </div>
+    {{ form.submit_btn(class="btn btn-primary login-btn") }}
+</form>
+{% endblock %}

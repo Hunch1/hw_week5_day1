@@ -1,45 +1,33 @@
-{% extends 'base.html' %}
-
-{% block styles %}
-    <link rel="stylesheet" href="">
-{% endblock %}
-
-{% block content %}
-    <form method="POST">
-      {{ form.hidden_tag() }}
-        <div class="mb-3">
-          <label for="pokemonNum" class="form-label">Enter Pokemon Number</label>
-          <!-- <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id"> -->
-          {{ form.pokemon(class="form-control", id="pokemonNum") }}
-        </div>
-        </div>
-        <!-- <button type="submit" class="btn btn-primary">Search</button> -->
-        {{ form.submit_btn(class="btn btn-primary") }}
-    </form>
-    <!-- {{ pokemon_stats }} -->
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Name</th>
-            <th scope="col">Base Experience</th>
-            <th scope="col">Shiny Sprite</th>
-            <th scope="col">Base attack</th>
-            <th scope="col">Base hp</th>
-            <th scope="col">Base defense</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for data in pokemon_stats %}
-            <tr>
-              <th scope="row">{{ data['name'] }}</th>
-              <td>{{ data['base experience'] }}</td>
-              <td>{{ data['shiny sprite'] }}</td>
-              <td>{{ data['attack base stat'] }}</td>
-              <td>{{ data['hp base stat'] }}</td>
-              <td>{{ data['defense base stat'] }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    
-{% endblock %}
+{% extends 'base.html' %} {% block styles %}
+<link rel="stylesheet" href="" />
+{% endblock %} {% block content %}
+<div class="container mt-4">
+  <!-- <div class="card p-4"></div> -->
+  <form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+      <label for="pokemonNum" class="form-label">Enter Pokemon Number</label>
+      <!-- <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id"> -->
+      <div class="d-flex"></div>
+      {{ form.pokemon(class="form-control", id="pokemonNum") }}
+    </div>
+    <!-- <button type="submit" class="btn btn-primary">Search</button> -->
+    {{ form.submit_btn(class="btn btn-primary") }}
+  </form>
+  <!-- {{ pokemon_stats }} -->
+  {% if error_code %}
+  <div class="alert alert-danger" role="alert">{{error_code}}</div>
+  {% endif %} {% if stats %}
+  <div class="mt-3"></div>
+  <table class="table">
+    {% for label, data in stats %}
+    <thead>
+      <th>{{label}}</th>
+    </thead>
+    <tr>
+      <td>{{data}}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %} {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="../static/styles/login.css">
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">Login</h1>
+<form method="POST" class="w-25 mx-auto shadow-lg p-3 mb-5 bg-body-tertiary rounded">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        {{ form.email(class="form-control cus-input", id="email") }}
+        <div id="emailHelp" class="form-text">Are you ready for some Pokemon :) </div>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        {{ form.password(class="form-control cus-input", id="password") }}
+    </div>
+    {{ form.submit_btn(class="btn btn-primary login-btn") }}
+</form>
+{% endblock %}
