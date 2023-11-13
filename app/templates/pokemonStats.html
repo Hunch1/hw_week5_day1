@@ -1,12 +1,13 @@
 {% extends 'base.html' %} {% block styles %}
-<link rel="stylesheet" href="" />
+<link rel="stylesheet" href="../static/styles/pokemonStats.css" />
 {% endblock %} {% block content %}
+{% include 'includes/nav.html' %}
 <div class="container mt-4">
   <!-- <div class="card p-4"></div> -->
   <form method="post">
     {{ form.hidden_tag() }}
     <div class="mb-3">
-      <label for="pokemonNum" class="form-label">Enter Pokemon Number</label>
+      <label for="pokemonNum" class="form-label">Enter Pokemon Please</label>
       <!-- <input type="text" class="form-control" id="pokemonNUM" name="pokemon_id"> -->
       <div class="d-flex"></div>
       {{ form.pokemon(class="form-control", id="pokemonNum") }}
@@ -25,9 +26,13 @@
       <th>{{label}}</th>
     </thead>
     <tr>
-      <td>{{data}}</td>
+      {% if label == 'SpriteURL' %}
+        <td><img src="{{ data }}" alt="Pokemon Sprite" class="pokemon-sprite"></td>
+      {% else %}
+        <td>{{ data }}</td>
+      {% endif %}
     </tr>
-    {% endfor %}
+  {% endfor %}
   </table>
 </div>
 {% endif %} {% endblock %}

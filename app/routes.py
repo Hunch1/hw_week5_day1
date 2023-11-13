@@ -1,12 +1,15 @@
-from flask import request, render_template
+from flask import request, render_template, redirect, url_for, flash
 import requests
 from app import app
 from app.forms import PokemonForm, LoginForm, SignupForm
+from app.models import User, db
+from werkzeug.security import check_password_hash
+from flask_login import login_user, logout_user, current_user, login_required
 # homepage
 @app.route('/')
 @app.route('/home')
 def home():
-    return "Welcome! This is the home page."
+    return render_template('home.html')
 # Pokemon stats
 # import requests
 # url = f'https://pokeapi.co/api/v2/pokemon/15'
@@ -57,8 +60,11 @@ def login():
         email = form.email.data
         password = form.password.data
 
-        if email in REGISTERED_USERS and REGISTERED_USERS[email]['password'] == password:
-            return f'Hello, {REGISTERED_USERS[email]["name"]}'
+        queried_user = User.query.filter(User.email == email).first()
+        if queried_user and check_password_hash(queried_user.password, password):
+            login_user(queried_user)
+            flash(f'Hello, {queried_user.first_name}!', 'success')
+            return redirect(url_for('home'))
         else:
             return 'Invalid email or password'
     else:
@@ -71,15 +77,26 @@ def login():
 def signup():
     form = SignupForm()
     if request.method == 'POST' and form.validate_on_submit():
-        full_name = f'{form.first_name.data} {form.last_name.data}'
+        first_name = form.first_name.data 
+        last_name = form.last_name.data
         email = form.email.data
         password = form.password.data
         
-        REGISTERED_USERS[email] = {
-            'name': full_name,
-            'password': password
-        }
+        # Create an instance of our User Class
+        user = User(first_name, last_name, email, password)
 
-        return f'Thank you for signing up {full_name}!'
+        # add user to database
+        db.session.add(user)
+        db.session.commit()
+
+        flash(f'Thank you for signing up {first_name}!', 'success')
+        return redirect(url_for('login'))
     else:
         return render_template('signup.html', form=form)
+    
+
+
+@app.route('/logout')
+def logout():
+        # Logout logic here
+    return redirect(url_for('login'))

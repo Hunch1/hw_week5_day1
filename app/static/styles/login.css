@@ -11,3 +11,30 @@ body {
 h1{
     color: darkgray;
 }
+
+img {
+    border-radius: 50%;
+    width: 260px;
+    height: 260px;
+    margin-top: 20px;
+}
+
+
+.login-btn {
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    color: #1f1f1f;
+    border: 1px solid #1f1f1f;
+    font-weight: 700;
+    transition: .5s;
+}
+
+
+
+.login-btn:hover {
+    color: white;
+    background-color: #1f1f1f;
+    border: 1px solid white;
+    transform: scale(1.2);
+}
