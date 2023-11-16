@@ -1,3 +1,12 @@
 {
-    "git.ignoreLimitWarning": true
+    "git.ignoreLimitWarning": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "connectString": "postgres://cviourfs:eT7C-HLn4MsAzF4r2aPuF7D5rwh0Y0kc@suleiman.db.elephantsql.com/cviourfs",
+            "name": "flask"
+        }
+    ]
 }

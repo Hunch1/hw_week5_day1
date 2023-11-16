@@ -19,5 +19,8 @@
         {{ form.password(class="form-control cus-input", id="password") }}
     </div>
     {{ form.submit_btn(class="btn btn-primary login-btn") }}
+    <div>
+        <a href="{{ url_for('auth.signup') }}">Don't have an account? Sign up!</a>
+      </div>
 </form>
 {% endblock %}

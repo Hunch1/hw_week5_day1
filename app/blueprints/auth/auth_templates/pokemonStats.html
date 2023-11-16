@@ -27,12 +27,27 @@
     </thead>
     <tr>
       {% if label == 'SpriteURL' %}
-        <td><img src="{{ data }}" alt="Pokemon Sprite" class="pokemon-sprite"></td>
+      <td><img src="{{ data }}" alt="Pokemon Sprite" class="pokemon-sprite"></td>
       {% else %}
-        <td>{{ data }}</td>
+      <td>{{ data }}</td>
       {% endif %}
     </tr>
-  {% endfor %}
+    {% endfor %}
   </table>
+  <form method="post" action="{{ url_for('auth.add_to_team') }}">
+    {{ form.hidden_tag() }}
+    <input type="hidden" name="pokemon_id" value="{{ stats['ID'] }}">
+    <button type="submit" class="btn btn-success">Add to Team</button>
+  </form>
+  {% endif %}
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="alert alert-success" role="alert">
+    {% for message in messages %}
+    {{ message }}<br>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
 </div>
-{% endif %} {% endblock %}
+{% endblock %}

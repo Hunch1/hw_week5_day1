@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('home') }}">Pokemon Home</a>
+        <a class="navbar-brand" href="{{ url_for('main.home') }}">Pokemon Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -11,14 +11,21 @@
                 <li class="nav-item me-2">
                     <a class="nav-link current-user" href="#">{{ current_user.first_name }}</a>
                 </li>
-                {% endif %}
                 </li>
                 <li class="nav-item me-2">
-                    <a class="nav-link" href="{{ url_for('get_pokemon_data') }}">Pokemon stats</a>
+                    <a class="nav-link" href="{{ url_for('auth.get_pokemon_data') }}">Pokemon stats</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-danger" href="{{ url_for('logout') }}">Logout</a>
+                    <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">Logout</a>
                 </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('auth.signup') }}">Signup</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
