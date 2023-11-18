@@ -1,9 +1,12 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, EmailField, PasswordField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms.validators import DataRequired, EqualTo, ValidationError
 
+def pokemonInputValidation(form, userInput):
+    pass
+    raise ValidationError('')
 class PokemonForm(FlaskForm):
-    pokemon = StringField('pokemonNum:', validators=[DataRequired()])
+    pokemon = StringField('pokemonNum:', validators=[DataRequired(), pokemonInputValidation])
     submit_btn = SubmitField('submit')
 
 class LoginForm(FlaskForm):

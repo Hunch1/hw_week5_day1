@@ -12,3 +12,26 @@ label {
     font-weight: bold;
     color: white
 }
+
+
+h2 {
+    font-weight: bold;
+    color: white
+}
+
+p {
+    font-weight: bold;
+    color: white
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.pokemon-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}

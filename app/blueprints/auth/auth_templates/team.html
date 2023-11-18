@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block styles %}
+<link rel="stylesheet" href="../static/styles/pokemonStats.css" />
+{% endblock %}
+
+{% block content %}
+{% include 'includes/nav.html' %}
+<div class="container mt-4">
+    <h2>Your Pokemon Team</h2>
+
+    {% if user_pokemons %}
+    <form method="post" action="{{ url_for('auth.clear_team') }}" class="mb-3">
+        <button type="submit" class="btn btn-danger">Clear Team</button>
+    </form>
+
+    <div class="pokemon-grid">
+        {% for pokemon in user_pokemons %}
+        <div class="pokemon-card">
+            <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.name }} Sprite">
+            <p>Name: {{ pokemon.name }}</p>
+            <p>Base Experience: {{ pokemon.base_experience }}</p>
+            <p>HP: {{ pokemon.hp }}</p>
+            <p>Attack: {{ pokemon.attack }}</p>
+            <p>Defense: {{ pokemon.defense }}</p>
+            <p>Speed: {{ pokemon.speed }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>Your Pokemon team is empty <a href="{{ url_for('auth.get_pokemon_data') }}">Add Pokemon here!!</a></p>
+    {% endif %}
+</div>
+{% endblock %}

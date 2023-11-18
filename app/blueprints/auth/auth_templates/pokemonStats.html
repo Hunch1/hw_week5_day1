@@ -34,11 +34,13 @@
     </tr>
     {% endfor %}
   </table>
-  <form method="post" action="{{ url_for('auth.add_to_team') }}">
+  {% if pokemon_id %}
+  <form method="post" action="{{ url_for('auth.add_to_team', pokemon_id=pokemon_id) }}">
     {{ form.hidden_tag() }}
-    <input type="hidden" name="pokemon_id" value="{{ stats['ID'] }}">
+    <!-- <input type="hidden" name="pokemon_id" value="{{ pokemon_id }}"> -->
     <button type="submit" class="btn btn-success">Add to Team</button>
   </form>
+  {% endif %}
   {% endif %}
   {% with messages = get_flashed_messages() %}
   {% if messages %}
