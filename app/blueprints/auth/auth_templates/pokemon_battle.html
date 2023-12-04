@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/styles/pokemonStats.css" />
+{% include 'includes/nav.html' %}
+<style>
+    h1 {
+        text-align: center;
+        color: white;
+        font-weight: bold;
+    }
+
+    ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 0;
+    }
+
+
+    li {
+        width: 30%;
+        margin: 10px;
+        padding: 15px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    ul ul {
+        list-style: none;
+        padding: 0;
+    }
+
+
+    li li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        justify-content: space-around;
+    }
+
+
+    li li img {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+    }
+
+
+    li li span {
+        color: black;
+        font-weight: bold;
+        background-color: #f8f8f8;
+        padding: 5px;
+        border-radius: 5px;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    li button {
+        background-color: #FF0000;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        width: 70px;
+        height: 70px;
+    }
+
+    li button:hover {
+        background-color: #CC0000;
+    }
+</style>
+
+<h1>Current Challengers</h1>
+
+<ul>
+    {% for user in other_users %}
+    <li>
+        <strong>{{ user.first_name }} {{ user.last_name }}</strong>
+        <ul>
+            {% for pokemon in user.pokemons %}
+            <li>
+                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.name }} Sprite" width="50" height="50">
+                <span>{{ pokemon.name }}</span>
+                <span>HP: {{ pokemon.hp }}</span>
+                <span>Attack: {{ pokemon.attack }}</span>
+                <span>Defense: {{ pokemon.defense }}</span>
+                <span>Speed: {{ pokemon.speed }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+        <form method="post" action="{{ url_for('auth.find_users') }}">
+            {{ form.hidden_tag() }}
+            <input type="hidden" name="target_user" value="{{ user.id }}">
+            <input type="hidden" name="attacker_pokemon" value="{{ user.pokemons.id }}">
+            <input type="hidden" name="defender_pokemon" value="{{ user.pokemons.id }}">
+            <button type="submit" name="attack_submit">Attack</button>
+        </form>
+        
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

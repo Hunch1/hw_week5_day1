@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="../static/styles/pokemonStats.css" />
+<style>
+    .winner-container {
+        text-align: center;
+        margin-top: 50px; 
+    }
+
+    .winner-text {
+        color: white;
+        font-weight: bold;
+    }
+
+    .winner-info {
+        color: white; 
+    }
+
+    .pokemon-list {
+        list-style: none;
+        padding: 0;
+    }
+
+
+</style>
+
+{% include 'includes/nav.html' %}
+    <div class="winner-container">
+        <h1 class="winner-text">Winner!!!</h1>
+        {% if winner %}
+            <p class="winner-info">The winning team:</p>
+            <ul class="pokemon-list">
+                {% for pokemon in winner.team %}
+                    <li class="pokemon-item">{{ pokemon.name }}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="winner-info">What an intense battle!!</p>
+        {% endif %}
+    </div>
+{% endblock %}

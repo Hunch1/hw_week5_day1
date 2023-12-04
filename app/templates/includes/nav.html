@@ -1,35 +1,66 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url_for('main.home') }}">Pokemon Home</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if current_user.is_authenticated %}
-                <li class="nav-item me-2">
-                    <a class="nav-link current-user" href="#">{{ current_user.first_name }}</a>
-                </li>
-                </li>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="{{ url_for('auth.get_pokemon_data') }}">Pokedex</a>
-                </li>
-                <li class="nav-item me-2">
-                    <a class="nav-link" href="{{ url_for('auth.team') }}">Your Team</a>
-                </li>
-                <li class="nav-item">
-                    <a class="btn btn-danger" href="{{ url_for('auth.logout') }}">Logout</a>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('auth.signup') }}">Signup</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background-color: #f0f0f0;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px;
+            margin: 0 5px;
+        }
+
+        nav a:hover {
+            background-color: #ddd;
+        }
+
+        .right {
+            margin-left: auto;
+        }
+
+        #pokemon-home {
+            margin-right: 800px;
+            font-size: 20px; /* Adjust the font size as needed */
+            font-weight: bold;
+        }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a id="pokemon-home" href="{{ url_for('main.home') }}">Pokemon Home</a>
+    {% if current_user.is_authenticated %}
+        <a class="right" href="#">{{ current_user.first_name }}</a>
+        <a class="right" href="{{ url_for('auth.get_pokemon_data') }}">Pokedex</a>
+        <a class="right" href="{{ url_for('auth.team') }}">Your Team</a>
+        <a class="right" href="{{ url_for('auth.find_users') }}">Pokemon Battles</a> 
+        <a class="right" href="{{ url_for('auth.logout') }}">Logout</a>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a href="{{ url_for('auth.signup') }}">Signup</a>
+    {% endif %}
 </nav>
+
+<div class="content">
+</div>
+
+</body>
+</html>
+

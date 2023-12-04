@@ -5,9 +5,6 @@ from app.models import User, db, Pokemon
 from werkzeug.security import check_password_hash
 from flask_login import login_user, logout_user, current_user, login_required
 import requests
-from sqlalchemy import or_
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy import func
 
 
@@ -28,7 +25,8 @@ def login():
             flash(f'Hello, {queried_user.first_name}!', 'success')
             return redirect(url_for('main.home'))
         else:
-            return 'Invalid email or password'
+            flash('Invalid email or password', 'error')
+            return redirect(url_for('auth.login'))
     else:
         return render_template('login.html', form=form)
     
@@ -57,7 +55,7 @@ def signup():
         return render_template('signup.html', form=form)
     
 
-#
+# logout
 @auth.route('/logout')
 def logout():
         # Logout logic here
@@ -153,24 +151,19 @@ def get_pokemon_data():
 @auth.route('/Pokemon/add_to_team/<string:pokemon_id>', methods=['POST'])
 @login_required
 def add_to_team(pokemon_id):
-    # Ensure pokemon_id is not None and is a string
     selected_pokemon_id = str(pokemon_id).strip()
 
     if selected_pokemon_id.isdigit():
-        # If it's a digit, try to get the Pokémon from the database by ID
         selected_pokemon = Pokemon.query.filter(Pokemon.id == int(selected_pokemon_id)).first()
     else:
-        # If it's not a digit, try to get the Pokémon from the database by name (case-insensitive)
         selected_pokemon = Pokemon.query.filter(func.lower(Pokemon.name) == selected_pokemon_id.lower()).first()
 
     if selected_pokemon:
-        # Check if the selected Pokemon is already in the user's team
         if selected_pokemon in current_user.pokemons:
             flash('You already have this Pokemon in your team.', 'warning')
         elif current_user.pokemons.count() >= 6:
             flash('Your team is already full. Remove a Pokemon before adding a new one.', 'danger')
         else:
-            # Append the selected Pokemon to the user's team
             current_user.pokemons.append(selected_pokemon)
             db.session.commit()
 
@@ -183,21 +176,9 @@ def add_to_team(pokemon_id):
 
 
 
-
-
-    
-   
-
-
-
-
-
-
-
 @auth.route('/team')
 @login_required
 def team():
-    # Fetch the user's team from the database
     user_pokemons = current_user.pokemons.all()
     return render_template('team.html', user_pokemons=user_pokemons)
 
@@ -206,9 +187,86 @@ def team():
 @auth.route('/Pokemon/clear_team', methods=['POST'])
 @login_required
 def clear_team():
-    # Clear the user's team by removing all Pokemon
     current_user.pokemons = []
     db.session.commit()
 
     flash('Your team has been cleared!', 'success')
     return redirect(url_for('auth.team'))
+
+
+@auth.route('/find_users', methods=['GET', 'POST'])
+@login_required
+def find_users():
+    other_users = User.query.filter(User.id != current_user.id).all()
+    form = PokemonForm()
+
+    form.target_user.choices = [(user.id, f'{user.first_name} {user.last_name}') for user in other_users]
+
+    if request.method == 'POST':
+        target_user_id = form.target_user.data
+
+        if target_user_id is None:
+            flash('Please select a valid target user.', 'error')
+            return redirect(url_for('auth.find_users'))
+        
+        target_user = User.query.get(target_user_id)
+
+        attacker_pokemon = form.attacker_pokemon.data
+        defender_pokemon = form.defender_pokemon.data
+
+        flash(f'Initiating attack on {target_user.first_name} {target_user.last_name} using Pokémon {attacker_pokemon} against {defender_pokemon}!', 'success')
+        return redirect(url_for('auth.pokemon_battle', target_user_id=target_user_id, attacker_pokemon=attacker_pokemon, defender_pokemon=defender_pokemon))
+
+    return render_template('pokemon_battle.html', other_users=other_users, form=form)
+
+
+  
+@auth.route('/pokemon_battle/<string:target_user_id>', methods=['GET', 'POST'])
+@login_required
+def pokemon_battle(target_user_id):
+    # taking the attacks of the teams pokemon and whatever was higher
+    # would determine the winner
+    # focused on getting one on one to work
+    target_user_id = int(target_user_id)
+
+    form = PokemonForm()
+
+    target_user = User.query.get(target_user_id)
+    target_user_pokemons = target_user.pokemons.all()
+
+    if request.method == 'POST' and form.validate_on_submit():
+        attacker_pokemon_id = form.attacker_pokemon.data.strip()
+        defender_pokemon_id = form.defender_pokemon.data.strip()
+
+
+        if attacker_pokemon_id and defender_pokemon_id:
+            attacker_pokemon = Pokemon.query.get(attacker_pokemon_id)
+            defender_pokemon = Pokemon.query.get(defender_pokemon_id)
+
+            if attacker_pokemon and defender_pokemon:
+                if attacker_pokemon.attack > defender_pokemon.attack:
+                    winner = attacker_pokemon
+                elif attacker_pokemon.attack < defender_pokemon.attack:
+                    winner = defender_pokemon
+                else:
+                    winner = None  # It's a tie
+
+                if winner:
+                    flash(f'The winner is {winner.name}!', 'success')
+
+                    # Redirect to the winner page with the winner's pokemon
+                    return redirect(url_for('auth.winner', winner_id=winner.id))
+                else:
+                    flash('It\'s a tie!')
+
+                return redirect(url_for('auth.find_users'))
+
+    return render_template('winner.html', form=form, target_user=target_user, target_user_pokemons=target_user_pokemons)
+
+
+
+@auth.route('/winner/<int:winner_id>')
+@login_required
+def display_winner(winner_id):
+    winner = User.query.get(winner_id)
+    return render_template('winner.html', winner=winner)

@@ -1,13 +1,15 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, EmailField, PasswordField
+from wtforms import StringField, SubmitField, EmailField, PasswordField, SelectField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 
-def pokemonInputValidation(form, userInput):
-    pass
-    raise ValidationError('')
+
 class PokemonForm(FlaskForm):
-    pokemon = StringField('pokemonNum:', validators=[DataRequired(), pokemonInputValidation])
+    pokemon = StringField('pokemonNum:', validators=[DataRequired()])
     submit_btn = SubmitField('submit')
+    attacker_pokemon = SelectField('Select Attacker', coerce=int, validators=[DataRequired()])
+    defender_pokemon = SelectField('Select Defender', coerce=int, validators=[DataRequired()])
+    target_user = SelectField('Target User', choices=[], coerce=int)
+
 
 class LoginForm(FlaskForm):
     email = EmailField('Email: ', validators=[DataRequired()])
